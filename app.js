@@ -11,6 +11,22 @@ nunjucks.configure('views', {
 // 정적파일 처리
 app.use('/assets', express.static(__dirname + '/assets'));
 
+// 세션사용을 위한 세팅
+const session = require('express-session');
+const sessionFile = require('session-file-store')(session);
+
+// 세션 세팅
+app.use(session({
+    secret: "kiwu",
+    resave: true,
+    store: new sessionFile({logFn: function(){}})
+}));
+
+// post 값 받기
+app.use(express.urlencoded({
+    extended: true
+}));
+
 indexRouter = require('./router/home');
 boardRouter = require('./router/board');
 memberRouter = require('./router/member');

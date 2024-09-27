@@ -41,7 +41,7 @@
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
-                <a href="index.html" class="logo d-flex align-items-center w-auto">
+                <a href="/" class="logo d-flex align-items-center w-auto">
                   <img src="/assets/img/logo.png" alt="">
                   <span class="d-none d-lg-block">Node JS</span>
                 </a>
@@ -56,20 +56,21 @@
                     <p class="text-center small">사용자 ID와 Password를 입력하세요.</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
+                  <form class="row g-3" method="post" action="/member/login" name="loginFrm" id="loginFrm">
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">User ID</label>
+                      <label for="user_id" class="form-label">User ID</label>
                       <div class="input-group has-validation">
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">사용자 ID를 입력하세요.</div>
+                        <input type="text" name="user_id" class="form-control" id="user_id">
                       </div>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
-                      <div class="invalid-feedback">Password를 입력하세요.</div>
+                      <label for="user_pw" class="form-label">Password</label>
+                      <div class="input-group">
+                        <input type="password" name="user_pw" class="form-control" id="user_pw">
+                    
+                      </div>
                     </div>
 
                     <div class="col-12">
@@ -111,6 +112,48 @@
 
   <!-- Template Main JS File -->
   <script src="/assets/js/main.js"></script>
+
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
+
+  <script type="text/javascript">
+    $(function() { // 페이지 로딩되면
+      $('#loginFrm').validate({
+        debug: false,
+        onkeyup: false,
+        submitHandler: function (f) {
+          f.submit();
+        },
+        rules: {
+          user_id: {
+            required: true,
+          },
+          user_pw: {
+            required: true,
+          },
+        },
+        messages: {
+          user_id: {
+            required: "User ID를 입력하세요.",
+          },
+          user_pw: {
+            required: "Password를 입력하세요.",
+          }
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.input-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
+    }); 
+  </script>
 
 </body>
 

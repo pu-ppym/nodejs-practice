@@ -2,12 +2,12 @@ const express = require('express');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.render('member/list');
-});
+const controller = require('../controller/memberController');
 
-router.get('/login', (req, res) => {
-    res.render('member/login');
-});
+router.get('/', controller.list);
+
+router.get('/login', controller.login);
+
+router.post('/login', controller.loginProc);
 
 module.exports = router;

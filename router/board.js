@@ -2,9 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.render('board/list');
-});
+const controller = require('../controller/boardController');
+
+router.get('/', controller.list);
 
 
 module.exports = router;
