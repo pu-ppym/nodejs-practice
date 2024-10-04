@@ -23,6 +23,11 @@ const loginProc = (async(req, res) => {
         let {user_id, user_pw} = req.body; // 알아서 매핑해줌?
         //console.log(user_id);
         //console.log(user_pw);
+        
+        // XSS 방지 -> 엄격하게
+        user_id = common.reqeustFilter(user_id, 20, false);
+        user_pw = common.reqeustFilter(user_pw, 20, false);
+
 
         const result = await model.loginCheck(user_id, user_pw);
 
