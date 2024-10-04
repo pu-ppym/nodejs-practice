@@ -18,23 +18,27 @@ const login = ((req, res) => {
     }
 });
 
-const loginProc = ((req, res) => {
+const loginProc = (async(req, res) => {
     try {
         let {user_id, user_pw} = req.body; // 알아서 매핑해줌?
         //console.log(user_id);
         //console.log(user_pw);
-        if(user_id == 'jio' && user_pw == '1234') {
+
+        const result = await model.loginCheck(user_id, user_pw);
+
+        if(result != null) {
             // 로그인 ok
             req.session.user = {
-                pkid: '1',
-                user_id: 'jio',
-                user_name: '지오'
+                pkid: result.pkid,  // db 멤버 컬럼의 pkid
+                user_id: result.user_id,
+                user_name: result.name
             }
-            res.send('<script>alert("로그인 되었습니다."); location.href="/"; </script>');
-            res.end();
+
+            common.alertAndGo(res, "로그인 되었습니다.", "/")
+
         } else {
-            res.send('<script>alert("아이디 또는 비밀번호가 틀립니다."); location.href="/member/login"; </script>');
-            res.end();
+            common.alertAndGo(res, "아이디 또는 비밀번호가 틀립니다.", "/member/login")
+          
         }
 
         //res.send('처리페이지');

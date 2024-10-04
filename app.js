@@ -13,13 +13,20 @@ app.use('/assets', express.static(__dirname + '/assets'));
 
 // 세션사용을 위한 세팅
 const session = require('express-session');
-const sessionFile = require('session-file-store')(session);
+//const sessionFile = require('session-file-store')(session);
+
+const sessionDB = require('express-mysql-session')(session);
+const db = require('./common/db')
 
 // 세션 세팅
 app.use(session({
     secret: "kiwu",
     resave: true,
-    store: new sessionFile({logFn: function(){}})
+    // 세션 정보를 파일로 저장
+    //store: new sessionFile({logFn: function(){}})
+
+    //세션 정보를 database에 저장
+    store: new sessionDB(db.db)
 }));
 
 // post 값 받기
