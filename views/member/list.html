@@ -32,15 +32,21 @@
                   </tr>
                 </thead>
                 <tbody>
+                  {% if list != null %}
+                    {% for member in list %}
                   <tr class="text-center">
-                    <th scope="row">1</th>
-                    <td><a href="view.html">jio</a></td>
-                    <td>지오</td>
-                    <td>2024-09-20</td>
+                    <th scope="row">{{ member.pkid }}</th>
+                    <td><a href="/member/view?pkid={{member.pkid}}">{{ member.user_id }}</a></td>
+                    <td>{{ member.name }}</td>
+                    <td>{{ common.dateFormat(member.regdate) }}</td>
                   </tr>
-				  <tr class="text-center">
-                    <th colspan="5">데이타가 없습니다.</th>
+                    {% endfor %}
+                  {% else %}
+
+				          <tr class="text-center">
+                    <th colspan="4">데이타가 없습니다.</th>
                   </tr>
+                  {% endif %}
                 </tbody>
               </table>
             </div>

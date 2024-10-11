@@ -1,6 +1,8 @@
 const express = require('express');
 const nunjucks = require('nunjucks');
 
+const common = require('./common/common')
+
 const app = express();
 app.set('view engine', 'html');
 nunjucks.configure('views', {
@@ -33,6 +35,11 @@ app.use(session({
 app.use(express.urlencoded({
     extended: true
 }));
+
+
+// view 단에서 common 함수 사용할때
+app.locals.common = common;
+
 
 indexRouter = require('./router/home');
 boardRouter = require('./router/board');

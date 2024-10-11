@@ -2,13 +2,42 @@ const model = require('../model/memberModel');
 
 const common = require('../common/common');
 
-const list = ((req, res) => {
+const list = (async(req, res) => {
     try {
-        res.render('member/list');
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+
+            let list = await model.getList();
+
+            res.render('member/list', {loginUserInfo, list});
+        }  
+    
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+    }
+    
+});
+
+const getView = (async (req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+
+            // get 방식 데이터 받기
+            let {pkid} = req.query;   // 받을게 많다
+            console.log(pkid)
+            pkid = common.reqeustFilter(pkid, 0, false);   
+
+            let viewData = await model.getData(pkid);   // 모델에 넘겨
+
+            res.render('member/view', {loginUserInfo, viewData});     // view에 넘겨
+        }  
+    
     } catch (error) {
         res.status(500).send('500 Error: ' + error);
     }
 });
+
 
 const login = ((req, res) => {
     try {
@@ -20,6 +49,7 @@ const login = ((req, res) => {
 
 const loginProc = (async(req, res) => {
     try {
+        // post 방식의 데이터 받기
         let {user_id, user_pw} = req.body; // 알아서 매핑해줌?
         //console.log(user_id);
         //console.log(user_pw);
@@ -56,5 +86,6 @@ const loginProc = (async(req, res) => {
 module.exports = {
     list,
     login,
-    loginProc
+    loginProc,
+    getView
 };

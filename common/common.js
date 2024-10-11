@@ -1,7 +1,34 @@
 const xss = require('xss');
 
-const checkLogin = () => {
+const dateFormat = (date) => {
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let hour = date.getHours();
+    let minute = date.getMinutes();
+    let second = date.getSeconds();
 
+    month = month >= 10 ? month : '0' + month;
+    day = day >= 10 ? day : '0' + day;
+    hour = hour >= 10 ? hour : '0' + hour;
+    minute = minute >= 10 ? minute : '0' + minute;
+    second = second >= 10 ? second : '0' + second;
+
+    return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+}
+
+
+
+const checkLogin = (req, res, isMust = true) => {
+    let loginUserInfo = req.session.user;
+
+    if(loginUserInfo == null) {  // 로그인 안함
+        if(isMust) {
+            alertAndGo(res, "로그인이 필요합니다.", "/member/login");
+        }
+        return null;
+    }
+
+    return loginUserInfo;
 };
 
 const alertAndGo = (res, msg, url) => {
@@ -51,5 +78,6 @@ const reqeustFilter = (data, type, isHtml, defaultvalue = null) => {
 module.exports = {
     checkLogin,
     alertAndGo,
-    reqeustFilter
+    reqeustFilter,
+    dateFormat
 }
