@@ -24,6 +24,8 @@ const db = require('./common/db')
 app.use(session({
     secret: "kiwu",
     resave: true,
+    saveUninitialized: false,
+
     // 세션 정보를 파일로 저장
     //store: new sessionFile({logFn: function(){}})
 

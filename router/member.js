@@ -12,4 +12,8 @@ router.post('/login', controller.loginProc);
 
 router.get('/view', controller.getView);
 
+router.get('/register', controller.getRegister);
+
+router.post('/checkUserId', controller.checkUserId);
+
 module.exports = router;

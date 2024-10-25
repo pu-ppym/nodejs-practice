@@ -36,15 +36,17 @@ const alertAndGo = (res, msg, url) => {
 }
 
 const isNumber = (n) => {
-    return /^-?[\d.] + (?:e-?\d+)?$/.test(n);    // 정규 표현식 
+    return /^-?[\d.]+(?:e-?\d+)?$/.test(n);    // 정규 표현식 
 };
 
 const reqeustFilter = (data, type, isHtml, defaultvalue = null) => {
     switch (type) {
         case 0:     // 숫자만
-            let checkVal = data.replaceAll(',', '');
-            if(!isNumber(checkVal)) {
-                throw "parameter is not number Error";
+            if(data != null) {
+                let checkVal = data.replaceAll(',', '');
+                if(!isNumber(checkVal)) {
+                    throw "parameter is not number Error";
+                }
             }
             break;
         case -1:     // 길이 제한 없음
@@ -75,9 +77,74 @@ const reqeustFilter = (data, type, isHtml, defaultvalue = null) => {
     return data;
 }
 
+const pageNavigation = (printSize, page, pageSize, totalcount, url, params) => {
+    let html = '';
+
+    let totalPage = parseInt(totalcount / pageSize);
+    if (totalcount % pageSize != 0) {
+        totalPage++;
+    }
+
+    if (totalPage > 0 && page <= totalPage) {
+        start = parseInt((page - 1) / printSize) * printSize + 1;
+        end = start + (printSize - 1);
+
+        if (end > totalPage) end = totalPage;
+
+        html += '<nav aria-label="Page navigation ">';
+        html += '   <ul class="pagination justify-content-center">';
+
+        if (start > printSize) {
+            let prevPage = start - 1;
+
+            html += '       <li class="page-item">';
+            html += '           <a class="page-link" href="' + url + '?page=' + prevPage + params + '" aria-label="Previous">';
+            html += '               <span aria-hidden="true">&laquo;</span>';
+            html += '           </a>';
+            html += '       </li>';
+        } else {
+            html += '       <li class="page-item">';
+            html += '           <a class="page-link disabled" href="' + url + '?page=1' + params + '" aria-label="Previous">';
+            html += '               <span aria-hidden="true">&laquo;</span>';
+            html += '           </a>';
+            html += '       </li>';
+        }
+
+        let cnt = 1;
+        for (let i = start; i <= end; i++) {
+            if (page == i)
+                html += '<li class="page-item active"><a class="page-link disabled" href="' + url + '?page=' + i + params + '">' + i + '</a></li>';
+            else
+                html += '<li class="page-item"><a class="page-link" href="' + url + '?page=' + i + params + '">' + i + '</a></li>';
+            if (++cnt > printSize) break;
+        }
+
+        if (totalPage - start >= printSize) {
+            let nextPage = start + printSize;
+            html += '<li class="page-item">';
+            html += '   <a class="page-link" href="' + url + '?page=' + nextPage + params + '" aria-label="Next">';
+            html += '       <span aria-hidden="true">&raquo;</span>';
+            html += '   </a>';
+            html += '</li>';
+        } else {
+            html += '<li class="page-item">';
+            html += '   <a class="page-link disabled" href="#" aria-label="Next">';
+            html += '       <span aria-hidden="true">&raquo;</span>';
+            html += '   </a>';
+            html += '</li>';
+        }
+
+        html += '   </ul>';
+        html += '</nav>';
+    }
+
+    return html;
+}
+
 module.exports = {
     checkLogin,
     alertAndGo,
     reqeustFilter,
-    dateFormat
+    dateFormat,
+    pageNavigation
 }

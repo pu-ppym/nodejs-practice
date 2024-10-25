@@ -2,72 +2,66 @@
 
 <main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>회원관리</h1>
-    </div><!-- End Page Title -->
+  <div class="pagetitle">
+    <h1>회원관리</h1>
+  </div><!-- End Page Title -->
 
-    <section class="section">
-      <div class="row">
-        <div class="col-lg-12">
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
 
-          <div class="card">
-			<h5 class="card-header d-flex justify-content-between align-items-center">
-				<div class="input-group w-auto">
-					<input type="text" class="form-control" placeholder="검색어를 입력하세요."/>
-					<button class="btn btn-sm btn-outline-secondary" type="button">검색</button>
-				</div>
-				<div>
-					<a href="register.html" class="btn btn-sm btn-outline-primary">등록</a>
-                    <a href="login" class="btn btn-sm btn-outline-primary">로그인 테스트</a>
-				</div>
-			</h5>
-            <div class="card-body">
-              <table class="table">
-                <thead>
-                  <tr class="text-center">
-                    <th scope="col" class="col-1">번호</th>
-                    <th scope="col" class="col-2">아이디</th>
-                    <th scope="col" class="col-1">이름</th>
-                    <th scope="col" class="col-1">등록일</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% if list != null %}
-                    {% for member in list %}
-                  <tr class="text-center">
-                    <th scope="row">{{ member.pkid }}</th>
-                    <td><a href="/member/view?pkid={{member.pkid}}">{{ member.user_id }}</a></td>
-                    <td>{{ member.name }}</td>
-                    <td>{{ common.dateFormat(member.regdate) }}</td>
-                  </tr>
-                    {% endfor %}
-                  {% else %}
+        <div class="card">
+          <h5 class="card-header d-flex justify-content-between align-items-center">
+            <form method="get" action="/member/" name="searchFrm" id="searchFrm">
+              <div class="input-group w-auto">
+                <input type="text" name="search_key" id="search_key" value="{{search_key}}" class="form-control" placeholder="검색어를 입력하세요." />
+                <button class="btn btn-sm btn-outline-secondary" type="submit">검색</button>
+              </div>
+            </form>
 
-				          <tr class="text-center">
-                    <th colspan="4">데이타가 없습니다.</th>
-                  </tr>
-                  {% endif %}
-                </tbody>
-              </table>
+            <div>
+              <a href="/member/register?page={{page}}&search_key={{search_key}}" class="btn btn-sm btn-outline-primary">등록</a>
             </div>
+          </h5>
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr class="text-center">
+                  <th scope="col" class="col-1">번호</th>
+                  <th scope="col" class="col-2">아이디</th>
+                  <th scope="col" class="col-1">이름</th>
+                  <th scope="col" class="col-1">등록일</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if list != null %}
+                {% for member in list %}
+                <tr class="text-center">
+                  <th scope="row">{{ member.pkid }}</th>
+                  <td><a href="/member/view?pkid={{member.pkid}}&page={{page}}&search_key={{search_key}}">{{ member.user_id }}</a></td>
+                  <td>{{ member.name }}</td>
+                  <td>{{ common.dateFormat(member.regdate) }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
 
-			<div class="card-footer">
-				<nav aria-label="Page navigation example">
-					<ul class="pagination justify-content-center">
-					  <li class="page-item"><a class="page-link" href="#"><span>«</span></a></li>
-					  <li class="page-item"><a class="page-link" href="#">1</a></li>
-					  <li class="page-item active"><a class="page-link" href="#">2</a></li>
-					  <li class="page-item"><a class="page-link" href="#">3</a></li>
-					  <li class="page-item"><a class="page-link" href="#"><span>»</span></a></li>
-					</ul>
-				</nav>
-			</div>
+                <tr class="text-center">
+                  <th colspan="4">데이타가 없습니다.</th>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
           </div>
 
+          <div class="card-footer">
+            {{common.pageNavigation(3, page, pageSize, totalRecord, '/member/', '&search_key=' + search_key)|safe}}
+          </div>
         </div>
-      </div>
-    </section>
 
-  </main>
+      </div>
+    </div>
+  </section>
+
+</main>
 
 {% include "include/footer.html" %}

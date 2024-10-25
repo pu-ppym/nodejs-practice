@@ -1,0 +1,116 @@
+{% include "include/header.html" %}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>회원관리</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <form method="post" action="/member/register" name="joinFrm" id="joinFrm">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">회원 등록</h5>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">사용자 ID</label>
+                                <div class="col-sm-10 input-group" >
+                                    <input type="text" name="user_id" id="user_id" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">사용자 Password</label>
+                                <div class="col-sm-10 input-group">
+                                    <input type="password" name="user_pw" id="user_pw" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">사용자 Password 확인</label>
+                                <div class="col-sm-10 input-group">
+                                    <input type="password" name="user_pw_ck" id="user_pw_ck" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">사용자 이름</label>
+                                <div class="col-sm-10 input-group">
+                                    <input type="text" name="name" id="name" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-center">
+                                <a type="button" href="/member/?page={{page}}&search_key={{search_key}}"
+                                    class="btn btn-outline-secondary btn-sm me-1">목록</a>
+                                <button type="submit" class="btn btn-sm btn-outline-primary ms-1">등록</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </section>
+
+    <script type="text/javascript">
+        $(function () { // 페이지 로딩되면
+            $('#joinFrm').validate({
+                debug: false,
+                onkeyup: false,
+                submitHandler: function (f) {
+                    f.submit();
+                },
+                rules: {
+                    user_id: {
+                        required: true,
+                        remote: {
+                            url: "/member/checkUserId",
+                            type: "post",
+                        },
+                    },
+                    user_pw: {
+                        required: true,
+                    },
+                    user_pw_ck:{
+                        required: true,
+                        equalTo: '#user_pw',
+                    },
+                    name: {
+                        required: true,
+                    }
+                },
+                messages: {
+                    user_id: {
+                        required: "User ID를 입력하세요.",
+                        remote: "중복된 아이디!!!!",
+                    },
+                    user_pw: {
+                        required: "Password를 입력하세요.",
+                    },
+                    user_pw_ck: {
+                        required: "Password 확인을 입력하세요.",
+                        equalTo: "입력하신 비번이 서로 다릅니다",
+                    },
+                    name: {
+                        required: "이름을 입력하세요.",
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.input-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        }); 
+    </script>
+
+</main>
+
+{% include "include/footer.html" %}

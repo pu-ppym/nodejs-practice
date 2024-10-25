@@ -1,15 +1,22 @@
 const model = require('../model/memberModel');
-
 const common = require('../common/common');
+
+const pageSize = 10;
 
 const list = (async(req, res) => {
     try {
         let loginUserInfo = common.checkLogin(req, res); 
         if (loginUserInfo != null) {
+            let {page, search_key} = req.query;
+            page = common.reqeustFilter(page, 0, false, 1);   // 페이지요청 없을땐 기본 1페이지
+            search_key = common.reqeustFilter(search_key, -1, false, "");   
 
-            let list = await model.getList();
+            let totalRecord = await model.getTotalRecordCount(search_key);
+            
+            let list = await model.getList(pageSize, page, search_key);
+            console.log(totalRecord);
 
-            res.render('member/list', {loginUserInfo, list});
+            res.render('member/list', {loginUserInfo, list, search_key, page, pageSize, totalRecord});
         }  
     
     } catch (error) {
@@ -24,13 +31,17 @@ const getView = (async (req, res) => {
         if (loginUserInfo != null) {
 
             // get 방식 데이터 받기
-            let {pkid} = req.query;   // 받을게 많다
+            let {pkid, page, search_key} = req.query;   // 받을게 많다
             console.log(pkid)
+
             pkid = common.reqeustFilter(pkid, 0, false);   
+            page = common.reqeustFilter(page, 0, false, 1);   // 페이지요청 없을땐 기본 1페이지
+            search_key = common.reqeustFilter(search_key, -1, false, "");   
+
 
             let viewData = await model.getData(pkid);   // 모델에 넘겨
 
-            res.render('member/view', {loginUserInfo, viewData});     // view에 넘겨
+            res.render('member/view', {loginUserInfo, viewData, page, search_key});     // view에 넘겨
         }  
     
     } catch (error) {
@@ -83,9 +94,53 @@ const loginProc = (async(req, res) => {
     }
 });
 
+const getRegister = (req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+
+            // get 방식 데이터 받기
+            let {page, search_key} = req.query; 
+
+            page = common.reqeustFilter(page, 0, false, 1);   // 페이지요청 없을땐 기본 1페이지
+            search_key = common.reqeustFilter(search_key, -1, false, "");   
+
+            res.render('member/register', {loginUserInfo, page, search_key});     // view에 넘겨
+        }  
+    
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+    }
+}
+
+const checkUserId = async(req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+
+            // get 방식 데이터 받기
+            let {user_id} = req.body;   
+            
+            user_id = common.reqeustFilter(user_id, 20, false);   
+            let count = await model.getUserIdCount(user_id);   // 모델에 넘겨
+
+            if(count == 0) {
+                res.send('true');
+            } else {
+                res.send('false');
+            }
+        }  
+    
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+    }
+}
+
 module.exports = {
     list,
     login,
     loginProc,
-    getView
+    getView,
+    getRegister,
+    checkUserId
 };

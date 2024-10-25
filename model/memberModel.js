@@ -15,11 +15,13 @@ const loginCheck = (async(user_id, user_pw) => {
     }
 });
 
-const getList = async() => {
+const getList = async(pageSize, page, search_key) => {
     try {
-        const sql = "select pkid, user_id, name, regdate from member order by pkid desc";
-        
-        const result = await db.runSql(sql);
+        let start = (page - 1) * pageSize;
+        const sql = "select pkid, user_id, name, regdate from member where (user_id like ? or name like ?) order by pkid desc limit ?, ?";
+        const param = ["%"+search_key+"%", "%"+search_key+"%", start, pageSize];
+
+        const result = await db.runSql(sql, param);
 
         console.log(result);
 
@@ -44,9 +46,43 @@ const getData = async(pkid) => {
     }
 }
 
+const getTotalRecordCount = async (search_key) => {
+    try {
+        const sql = "select count(pkid) as cnt from member where (user_id like ? or name like ?)";
+        const param = ["%"+search_key+"%", "%"+search_key+"%"];
+
+        const result = await db.runSql(sql, param);
+
+        console.log(result);
+
+        return result[0].cnt;
+    } catch (error) {
+        throw "SQL Query Error on getTotalRecordCount";
+    }
+}
+
+
+const getUserIdCount = async (user_id) => {
+    try {
+        const sql = "select count(pkid) as cnt from member where user_id = ?";
+        const param = [user_id];
+
+        const result = await db.runSql(sql, param);
+
+        console.log(result);
+
+        return result[0].cnt;
+    } catch (error) {
+        throw "SQL Query Error on getUserIdCount";
+    }
+}
+
+
 
 module.exports = {
     loginCheck,
     getList,
-    getData
+    getData,
+    getTotalRecordCount,
+    getUserIdCount
 }
