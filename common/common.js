@@ -1,4 +1,6 @@
 const xss = require('xss');
+const path = require('path');
+
 
 const dateFormat = (date) => {
     let month = date.getMonth() + 1;
@@ -141,10 +143,27 @@ const pageNavigation = (printSize, page, pageSize, totalcount, url, params) => {
     return html;
 }
 
+
+const fileFilter = (req, file, callbackfuc) => {
+    const filetype = /.jpg|.png|.gif/   // 정규식  /.zip/ 
+    const extname = filetype.test(path.extname(file.originalname).toLowerCase());   // 원래 파일명의 확장자 가져오기, 소문자로 바꿈, true/false
+
+    if(extname) {
+        // 허용된 파일
+        return callbackfuc(null, true);
+    } else {
+        // 허용 안된 파일
+        return callbackfuc('Error: Image File Only');
+    }
+
+}
+
+
 module.exports = {
     checkLogin,
     alertAndGo,
     reqeustFilter,
     dateFormat,
-    pageNavigation
+    pageNavigation,
+    fileFilter
 }
