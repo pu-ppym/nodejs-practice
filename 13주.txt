@@ -1,0 +1,48 @@
+자기가쓴거 자기만수정
+
+
+
+pkid
+title varchar(100) not null,
+fkmember
+content text,
+viewcount int default 0,   -- 조회수
+originalfilename varchar(100),
+filepath varchar(100),
+regdate datetime default current_timestamp
+
+fk테이블명
+e.g) order_information
+..
+
+
+1. image
+  .jpg, .png
+보이게 할려면 확장자 필요
+확장자 없음 안보임
+
+
+2. 모든파일 업로드 
+다운만 하면 되니까 확장자 필요x
+
+
+
+
+drop 테이블 순서
+종속되는 테이블 위에 먼저 쓰자
+(지울때 먼저 지워야 되니까
+
+
+
+
+a.jpg
+a.2023.10.28.jpg
+a|2023|10|28|jpg  
+stack의 pop...
+'.' + filename.split('.').pop();
+jpg만 나오니까 .을 붙여서 return
+
+
+
+
+

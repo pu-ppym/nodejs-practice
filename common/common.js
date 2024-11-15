@@ -1,5 +1,6 @@
 const xss = require('xss');
 const path = require('path');
+const fs = require('fs');    // 기본 모듈, 설치x
 
 
 const dateFormat = (date) => {
@@ -158,6 +159,32 @@ const fileFilter = (req, file, callbackfuc) => {
 
 }
 
+const getFileExtension = (filename) => {
+    return '.' + filename.split('.').pop();
+
+}
+
+const moveFile = (sourceFile, targetFile) => {
+    try {  // 파일관련 무적권 try, e.g 공간 부족할때 오류날수있음
+        if(fs.existsSync(sourceFile)) {  // 파일 있을때만
+            fs.renameSync(sourceFile, targetFile)
+        }
+    } catch (error) {
+        throw 'moveFile Error';
+    }
+}
+
+
+const deleteFile = (fileName) => {
+    try {
+        if(fs.existsSync(fileName)) {
+            fs.unlinkSync(fileName);   // sync  삭제할때까지 기달
+        }
+    } catch (error) {
+        throw 'deleteFile Error';
+    }
+}
+
 
 module.exports = {
     checkLogin,
@@ -165,5 +192,8 @@ module.exports = {
     reqeustFilter,
     dateFormat,
     pageNavigation,
-    fileFilter
+    fileFilter,
+    getFileExtension,
+    moveFile,
+    deleteFile
 }

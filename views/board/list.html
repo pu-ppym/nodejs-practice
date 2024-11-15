@@ -12,10 +12,13 @@
 
           <div class="card">
 			<h5 class="card-header d-flex justify-content-between align-items-center">
-				<div class="input-group w-auto">
-					<input type="text" class="form-control" placeholder="검색어를 입력하세요."/>
-					<button class="btn btn-sm btn-outline-secondary" type="button">검색</button>
-				</div>
+        <form action="/board/" method="get" name="searchFrm" id="searchFrm">
+          <div class="input-group w-auto">
+            <input type="text" name="search_key" value="{{search_key}}" class="form-control" placeholder="검색어를 입력하세요."/>
+            <button class="btn btn-sm btn-outline-secondary" type="submit">검색</button>
+          </div>
+        </form>
+				
 				<div>
 					<a href="/board/register" class="btn btn-sm btn-outline-primary">등록</a>
 				</div>
@@ -27,36 +30,37 @@
                     <th scope="col" class="col-1">번호</th>
                     <th scope="col">제목</th>
                     <th scope="col" class="col-2">작성자</th>
+                    <th scope="col" class="col-1">첨부파일</th>
                     <th scope="col" class="col-1">조회수</th>
                     <th scope="col" class="col-1">등록일</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {% if list != null %}
+                    {% for board in list %}
                   <tr class="text-center">
-                    <th scope="row">1</th>
-                    <td><a href="view.html">Brandon Jacob</a></td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
+                    <th scope="row">{{board.pkid}}</th>
+                    <td><a href="view.html">{{board.title}}</a>
+                    <td>{{board.name}}</td>
+
+                    <td><a href="/uploads/board/2d5d2e61e0aa1024be74820d6a65207c.jpg" download="a.jpg">다운로드</a></td>
+                    
+                    <td>{{board.viewcount}}</td>
+                    <td>{{ common.dateFormat(board.regdate) }}</td>
                   </tr>
-				  <tr class="text-center">
-                    <th colspan="5">데이타가 없습니다.</th>
+                    {% endfor %}
+                  {% else %}
+				          <tr class="text-center">
+                    <th colspan="6">데이타가 없습니다.</th>
                   </tr>
+                  {% endif %}
                 </tbody>
               </table>
             </div>
 
 			<div class="card-footer">
-				<nav aria-label="Page navigation example">
-					<ul class="pagination justify-content-center">
-					  <li class="page-item"><a class="page-link" href="#"><span>«</span></a></li>
-					  <li class="page-item"><a class="page-link" href="#">1</a></li>
-					  <li class="page-item active"><a class="page-link" href="#">2</a></li>
-					  <li class="page-item"><a class="page-link" href="#">3</a></li>
-					  <li class="page-item"><a class="page-link" href="#"><span>»</span></a></li>
-					</ul>
-				</nav>
-			</div>
+				{{common.pageNavigation(3, page, pageSize, totalRecord, '/member/', '&search_key=' + search_key)|safe}}
+			  </div>
           </div>
 
         </div>
