@@ -25,6 +25,11 @@ router.get('/register', controller.register);
 router.post('/register', upload.array('attach_file'), controller.registerProc);   //upload.single 첨부파일 한개  , form 에서 지정한 필드이름 attach_file
 
 
+///Rest-api 용
+router.get('/ajax', controller.ajax);
+router.get('/getAjaxList', controller.getAjaxList);
+
+
 
 
 module.exports = router;

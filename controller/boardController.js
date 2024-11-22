@@ -76,9 +76,47 @@ const registerProc = async(req, res) => {
 }
 
 
+// Rest-api용
+const ajax = (req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+            res.render('board/ajax', {loginUserInfo});     // view에 넘겨
+        }  
+    
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+    }
+}
+
+const getAjaxList = async(req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+            let {page, search_key} = req.query;
+            page = common.reqeustFilter(page, 0, false, 1);   // 페이지요청 없을땐 기본 1페이지
+            search_key = common.reqeustFilter(search_key, -1, false, "");   
+
+            
+            let list = await model.getList(pageSize, page, search_key);
+            //console.log(totalRecord);
+
+            //res.render('board/list', {loginUserInfo, list, search_key, page, pageSize, totalRecord});
+            res.send(list);
+            res.end();
+        }  
+    
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+    }
+}
+
+
 
 module.exports = {
     list,
     register,
-    registerProc
+    registerProc,
+    ajax,
+    getAjaxList
 };
