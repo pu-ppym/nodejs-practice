@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');    // 기본 모듈, 설치x
 
 
-const dateFormat = (date) => {
+const dateFormat = (date, format='yyyy-mm-dd') => {
     let month = date.getMonth() + 1;
     let day = date.getDate();
     let hour = date.getHours();
@@ -16,7 +16,14 @@ const dateFormat = (date) => {
     minute = minute >= 10 ? minute : '0' + minute;
     second = second >= 10 ? second : '0' + second;
 
-    return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+    format = format.replace(/yyyy/g, date.getFullYear());
+    format = format.replace(/mm/g, month);
+    format = format.replace(/dd/g, day);
+    format = format.replace(/hh/g, hour);
+    format = format.replace(/ii/g, minute);
+    format = format.replace(/ss/g, second);
+
+    return format;
 }
 
 

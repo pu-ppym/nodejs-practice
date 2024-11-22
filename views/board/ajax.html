@@ -11,6 +11,15 @@
             <div class="col-lg-12">
 
                 <div class="card">
+                    <h5 class="card-header d-flex justify-content-between align-items-center">
+                        <div class="input-group w-auto">
+                            <input type="text" id="search_key" class="form-control" 
+                            placeholder="검색어를 입력하세요." />
+                            <button class="btn btn-sm btn-outline-secondary" type="button" onclick="search()">검색</button>
+                        </div>
+
+                    </h5>
+
                     <div class="card-body">
                         <table class="table">
                             <thead>
@@ -38,16 +47,56 @@
         </div>
     </section>
     <script>
+        function dateFormat(dateStr, format = 'yyyy-mm-dd') {
+            let millis = Date.parse(dateStr);
+            let date = new Date(millis);
+
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+            let second = date.getSeconds();
+
+            month = month >= 10 ? month : '0' + month;
+            day = day >= 10 ? day : '0' + day;
+            hour = hour >= 10 ? hour : '0' + hour;
+            minute = minute >= 10 ? minute : '0' + minute;
+            second = second >= 10 ? second : '0' + second;
+
+            format = format.replace(/yyyy/g, date.getFullYear());
+            format = format.replace(/mm/g, month);
+            format = format.replace(/dd/g, day);
+            format = format.replace(/hh/g, hour);
+            format = format.replace(/ii/g, minute);
+            format = format.replace(/ss/g, second);
+
+            return format;
+        }
+
         let page = 0;
+        let search_key = '';
+
+
+        function search() {
+            page = 0;
+            search_key = $('#search_key').val();  // 위에 id 에 있는거
+
+            $('#board_tbody').html('');    // 초기화
+
+            getList();
+
+        }
+
+
 
         function getList() {
             page++;
             $.ajax({
-                url: "getAjaxList",
+                url: "/board/getAjaxList",   // url: "getAjaxList"
                 type: "get",
                 cache: false,
                 dataType: "json",
-                data: "page=" + page + "&search_key=" + "",
+                data: "page=" + page + "&search_key=" + search_key,
                 async: true,
                 success: function (res) {
                     // 정상적으로 처리 완료되면 여기로
@@ -59,16 +108,16 @@
                         for (i = 0; i < res.length; i++) {
                             console.log(res[i].pkid);
                             console.log(res[i].title);
-                            
+
                             // html에 string으로 계속 담김
                             html += '<tr class="text-center">' +
-                            
-                                '<th scope="row">' + res[i].pkid +'</th>' + 
-                                '<td><a href="#">' + res[i].title +'</a></td>' +
-                                '<td>' + res[i].name +'</td>' +
-                                '<td>' + res[i].viewcount +'</td>' +
-                                '<td>' + res[i].regdate +'</td>' +
-                            '</tr>';
+
+                                '<th scope="row">' + res[i].pkid + '</th>' +
+                                '<td><a href="#">' + res[i].title + '</a></td>' +
+                                '<td>' + res[i].name + '</td>' +
+                                '<td>' + res[i].viewcount + '</td>' +
+                                '<td>' + dateFormat(res[i].regdate, 'yyyy년 mm월 dd일') + '</td>' +
+                                '</tr>';
                         }
                     }
 

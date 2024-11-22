@@ -46,7 +46,7 @@
                     <td><a href="/uploads/board/2d5d2e61e0aa1024be74820d6a65207c.jpg" download="a.jpg">다운로드</a></td>
                     
                     <td>{{board.viewcount}}</td>
-                    <td>{{ common.dateFormat(board.regdate) }}</td>
+                    <td>{{ common.dateFormat(board.regdate, 'yyyy.mm.dd hh:ii:ss') }}</td>
                   </tr>
                     {% endfor %}
                   {% else %}
