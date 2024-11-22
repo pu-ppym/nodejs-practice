@@ -92,7 +92,7 @@
         function getList() {
             page++;
             $.ajax({
-                url: "/board/getAjaxList",   // url: "getAjaxList"
+                url: "/board/getAjaxList",   // url: "getAjaxList" -> 상대경로    "/board/getAjaxList" -> 절대경로
                 type: "get",
                 cache: false,
                 dataType: "json",
