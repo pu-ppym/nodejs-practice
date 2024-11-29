@@ -25,6 +25,7 @@ const list = (async(req, res) => {
     
 });
 
+// 회원관리 내용보기
 const getView = (async (req, res) => {
     try {
         let loginUserInfo = common.checkLogin(req, res); 

@@ -112,11 +112,39 @@ const getAjaxList = async(req, res) => {
 }
 
 
+// 공지사항 내용보기
+const getView = (async (req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+
+            // get 방식 데이터 받기
+            let {pkid, page, search_key} = req.query;   // 받을게 많다
+            console.log(pkid)
+
+            pkid = common.reqeustFilter(pkid, 0, false);   
+            page = common.reqeustFilter(page, 0, false, 1);   // 페이지요청 없을땐 기본 1페이지
+            search_key = common.reqeustFilter(search_key, -1, false, "");   
+
+
+            let viewData = await model.getData(pkid);   // 모델에 넘겨
+
+            res.render('board/view', {loginUserInfo, viewData, page, search_key});     // view에 넘겨
+        }  
+    
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+    }
+});
+
+
+
 
 module.exports = {
     list,
     register,
     registerProc,
     ajax,
-    getAjaxList
+    getAjaxList,
+    getView
 };

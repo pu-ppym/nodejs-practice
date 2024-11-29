@@ -48,9 +48,26 @@ const getList = async(pageSize, page, search_key) => {
 }
 
 
+const getData = async(pkid) => {
+    try {
+        const sql = "select pkid, title, content, filepath, viewcount, reddate from board where pkid = ?";
+        const param = [pkid];
+
+        const result = await db.runSql(sql, param);
+
+        console.log(result);
+
+        return result[0];
+    } catch (error) {
+        throw "SQL Query Error on getData";
+    }
+}
+
+
 
 module.exports = {
     setBoard,
     getTotalRecordCount,
-    getList
+    getList,
+    getData
 }

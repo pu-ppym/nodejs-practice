@@ -1,0 +1,41 @@
+{% include "include/header.html" %}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>글 보기</h1>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card">
+            <h5 class="card-header d-flex justify-content-between">
+              <div>조회수: 1</div>
+              <div>2025-05-15</div>
+            </h5>
+                  <div class="card-body">
+              <h5 class="card-title">{{viewData.title}}</h5>
+                    <p>{{viewData.content}}</p>
+                  </div>
+      
+
+			<div class="card-footer">
+				<div class="d-flex justify-content-center">
+					<a href="/member/?page={{page}}&search_key={{search_key}}" class="btn btn-sm btn-outline-secondary ms-1">목록</a>
+					<a href="register.html" class="btn btn-sm btn-outline-primary ms-1">수정</a>
+					<a href="list.html" class="btn btn-sm btn-outline-danger ms-1">삭제</a>
+				</div>
+			</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+
+{% include "include/footer.html" %}
