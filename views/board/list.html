@@ -40,10 +40,10 @@
                     {% for board in list %}
                   <tr class="text-center">
                     <th scope="row">{{board.pkid}}</th>
-                    <td><a href="/board/view?pkid={{member.pkid}}&page={{page}}&search_key={{search_key}}">{{board.title}}</a>
+                    <td><a href="/board/view?pkid={{board.pkid}}&page={{page}}&search_key={{search_key}}">{{board.title}}</a>
                     <td>{{board.name}}</td>
 
-                    <td><a href="/uploads/board/2d5d2e61e0aa1024be74820d6a65207c.jpg" download="a.jpg">다운로드</a></td>
+                    <td><a href="{{ board.filepath }}" download="{{ board.originalname }}">다운로드</a></td>
                     
                     <td>{{board.viewcount}}</td>
                     <td>{{ common.dateFormat(board.regdate, 'yyyy.mm.dd hh:ii:ss') }}</td>

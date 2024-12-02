@@ -50,7 +50,7 @@ const getList = async(pageSize, page, search_key) => {
 
 const getData = async(pkid) => {
     try {
-        const sql = "select pkid, title, content, filepath, viewcount, reddate from board where pkid = ?";
+        const sql = "select pkid, fkmember, title, content, filepath, viewcount, regdate from board where pkid = ?";
         const param = [pkid];
 
         const result = await db.runSql(sql, param);
@@ -64,10 +64,43 @@ const getData = async(pkid) => {
 }
 
 
+const modifyBoard = async(title, content, filePath, originalname, pkid) => {
+    try {
+        const sql = "update board SET title = ?, content = ?, filepath = ?, originalname = ? where pkid = ?";
+        const param = [title, content, filePath, originalname, pkid];
+
+        const result = await db.runSql(sql, param);
+
+        console.log(result);
+
+        return result[0];
+    } catch (error) {
+        throw "SQL Query Error on modifyBoard" + error;
+    }
+};
+
+
+const getFileData = async(pkid) => {
+    try {
+        const sql = "select filepath, originalname from board where pkid = ?";
+        const param = [pkid];
+
+        const result = await db.runSql(sql, param);
+
+        console.log(result);
+
+        return result[0];
+    } catch (error) {
+        throw "SQL Query Error on getFileData";
+    }
+}
+
 
 module.exports = {
     setBoard,
     getTotalRecordCount,
     getList,
-    getData
+    getData,
+    modifyBoard,
+    getFileData
 }

@@ -9,20 +9,20 @@
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
-                <form method="post" name="writeFrm" id="writeFrm" action="/board/register" enctype="multipart/form-data">  <!-- 본문 개길수있으니까 post, enctype 필수 -->
+                <form method="post" name="writeFrm" id="writeFrm" action="/board/modify" enctype="multipart/form-data">  <!-- 본문 개길수있으니까 post, 파일첨부 enctype 필수 -->
                     <div class="card">
                       <div class="card-body">
-                          <h5 class="card-title">공지사항 등록</h5>
+                          <h5 class="card-title">공지사항 수정</h5>
                           <div class="row mb-3">
                             <label for="title" class="col-sm-2 col-form-label">제목</label>
                             <div class="col-sm-10 input-group">
-                              <input type="text" name="title" id="title" class="form-control"> <!-- laber for랑 id 같게-->
+                              <input type="text" name="title" id="title" class="form-control" value="{{viewData.title}}"> <!-- laber for랑 id 같게-->
                             </div>
                           </div>
                           <div class="row mb-3">
                             <label for="content" class="col-sm-2 col-form-label">내용</label>
                             <div class="col-sm-10 input-group">
-                              <textarea name="content" id="content" class="form-control" style="height: 100px"></textarea>
+                              <textarea name="content" id="content" class="form-control" style="height: 100px">{{viewData.content}}</textarea>
                             </div>
                           </div>
 
@@ -33,12 +33,15 @@
                             </div>
                           </div>
 
+                          <!-- pkid 전달 -->
+                          <input type="hidden" name="pkid" value="{{viewData.pkid}}">
+
                       </div>
       
                       <div class="card-footer">
                           <div class="d-flex justify-content-center">
-                              <a href="/board/" class="btn btn-sm btn-outline-secondary ms-1">목록</a>
-                              <button type="submit" href="register.html" class="btn btn-sm btn-outline-primary ms-1">등록</a>
+                              <a href="/board/?page={{page}}&search_key={{search_key}}" class="btn btn-sm btn-outline-secondary ms-1">목록</a>
+                              <button type="submit" class="btn btn-sm btn-outline-primary ms-1">수정</a>
                           </div>
                       </div>
                     </div>

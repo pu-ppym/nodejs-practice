@@ -26,11 +26,16 @@ router.post('/register', upload.array('attach_file'), controller.registerProc); 
 
 router.get('/view', controller.getView);
 
+// 수정
+router.get('/modify', controller.modify);
+
+router.post('/modify', upload.array('attach_file'), controller.modifyProc);
+
+
+
 ///Rest-api 용
 router.get('/ajax', controller.ajax);
 router.get('/getAjaxList', controller.getAjaxList);
-
-
 
 
 module.exports = router;

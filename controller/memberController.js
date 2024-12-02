@@ -138,6 +138,38 @@ const checkUserId = async(req, res) => {
 }
 
 
+const logout = async(req, res) => {
+    try {
+        const sessionId = req.sessionID; // 현재 세션 ID
+        
+        const result = await model.logout(sessionId);
+        
+        // 세션 종료
+        req.session.destroy(err => {
+            if (err) {
+                console.error('세션 삭제 중 오류:', err);
+                return res.status(500).send('로그아웃 처리 중 오류가 발생했습니다.');
+            }
+        });
+
+        if (result != null) {
+            common.alertAndGo(res, "로그아웃 되었습니다. ", "/member/login")
+            //res.redirect('/member');
+    
+        } else {
+            common.alertAndGo(res, "로그아웃 실패", "/member/register")
+        }
+
+    } catch (error) {
+        console.error('로그아웃 처리 중 오류:', error);
+        res.status(500).send('로그아웃 처리 중 오류가 발생했습니다.');
+    }
+}
+
+
+
+
+
 
 module.exports = {
     list,
@@ -145,5 +177,6 @@ module.exports = {
     loginProc,
     getView,
     getRegister,
-    checkUserId
+    checkUserId,
+    logout
 };

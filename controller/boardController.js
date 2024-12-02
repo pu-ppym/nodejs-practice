@@ -139,6 +139,70 @@ const getView = (async (req, res) => {
 
 
 
+// 수정
+const modify = (async(req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+
+            //console.log('테스트: ',loginUserInfo.pkid);
+            let {pkid, page, search_key} = req.query;
+            let viewData = await model.getData(pkid);
+            
+
+            if (loginUserInfo.pkid != viewData.fkmember) {
+                common.alertAndGo(res, "잘못된 접근입니다.", "/board/")
+            } else {
+                res.render('board/modify', { loginUserInfo, viewData, page, search_key });
+            }
+    
+        }
+    
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+    }
+});
+
+
+const modifyProc = async(req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+            let {pkid, title, content} = req.body;
+            let {filePath, originalname} = ['', ''];
+
+
+            let dbFileData = await model.getFileData(pkid);
+            console.log("db파일:",dbFileData);
+            filePath = dbFileData.filepath;
+            originalname = dbFileData.originalname;
+
+            
+            if(req.files[0] != null) {
+            const newFilePath = req.files[0].filename;
+            console.log("새로운 파일 확인: ",newFilePath); 
+
+                if (newFilePath) {   // 기존 파일과 다를때만
+                    originalname = req.files[0].originalname;
+                    filePath = 'uploads/board/' + req.files[0].filename + common.getFileExtension(req.files[0].originalname);
+                    
+                    common.moveFile('uploads/board/' + req.files[0].filename, filePath); 
+                }
+            }
+            await model.modifyBoard(title, content, filePath, originalname, pkid);
+
+
+            common.alertAndGo(res, "수정 되었습니다.", "/board/")
+
+        }
+    
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+        console.log(error);
+    }
+}
+
+
 
 module.exports = {
     list,
@@ -146,5 +210,7 @@ module.exports = {
     registerProc,
     ajax,
     getAjaxList,
-    getView
+    getView,
+    modify,
+    modifyProc
 };

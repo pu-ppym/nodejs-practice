@@ -94,6 +94,22 @@ const insertData = async(user_id, user_pw, name) => {
 }
 
 
+const logout = async(sessionId) => {
+    try {
+        const sql = "DELETE FROM sessions WHERE session_id = ?";
+        const param = [sessionId];
+
+        const result = await db.runSql(sql, param);
+
+        console.log(result);
+
+        return result;
+    } catch (error) {
+        throw "SQL Query Error on logout";
+    }
+}
+
+
 
 
 module.exports = {
@@ -101,5 +117,7 @@ module.exports = {
     getList,
     getData,
     getTotalRecordCount,
-    getUserIdCount
+    getUserIdCount,
+    insertData,
+    logout
 }

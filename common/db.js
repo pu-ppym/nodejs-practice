@@ -1,9 +1,9 @@
 const mysql = require('mysql2');
 
 const db = {
-    host : '192.168.5.115',  
-    user : 'kiwu',
-    password : 'kiwu!@',
+    host : 'localhost',    //192.168.5.115, kiwu, kiwu!@, kiwudb
+    user : 'jio',  
+    password : '6207',
     database : 'kiwudb'
 };
 
