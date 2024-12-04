@@ -69,11 +69,10 @@ const modifyBoard = async(title, content, filePath, originalname, pkid) => {
         const sql = "update board SET title = ?, content = ?, filepath = ?, originalname = ? where pkid = ?";
         const param = [title, content, filePath, originalname, pkid];
 
-        const result = await db.runSql(sql, param);
+        await db.runSql(sql, param);
 
-        console.log(result);
+        console.log('수정');
 
-        return result[0];
     } catch (error) {
         throw "SQL Query Error on modifyBoard" + error;
     }
@@ -96,11 +95,43 @@ const getFileData = async(pkid) => {
 }
 
 
+const deleteBoard = async(pkid) => {
+    try {
+        const sql = "delete from board where pkid = ?";
+        const param = [pkid];
+
+        await db.runSql(sql, param);
+
+        console.log('삭제');
+
+    } catch (error) {
+        throw "SQL Query Error on deleteBoard" + error;
+    }
+};
+
+
+const addViewCount = async(pkid) => {
+    try {
+        const sql = "update board SET viewcount = viewcount + 1 where pkid = ?";
+        const param = [pkid];
+
+        await db.runSql(sql, param);
+
+        console.log('조회수 증가');
+
+    } catch (error) {
+        throw "SQL Query Error on addViewCount" + error;
+    }
+};
+
+
 module.exports = {
     setBoard,
     getTotalRecordCount,
     getList,
     getData,
     modifyBoard,
-    getFileData
+    getFileData,
+    deleteBoard,
+    addViewCount
 }

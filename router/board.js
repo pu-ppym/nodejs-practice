@@ -31,6 +31,7 @@ router.get('/modify', controller.modify);
 
 router.post('/modify', upload.array('attach_file'), controller.modifyProc);
 
+router.post('/delete', controller.deleteProc);
 
 
 ///Rest-api 용

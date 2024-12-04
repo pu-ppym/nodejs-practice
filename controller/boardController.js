@@ -126,8 +126,11 @@ const getView = (async (req, res) => {
             page = common.reqeustFilter(page, 0, false, 1);   // 페이지요청 없을땐 기본 1페이지
             search_key = common.reqeustFilter(search_key, -1, false, "");   
 
+            await model.addViewCount(pkid);  // 조회수
 
             let viewData = await model.getData(pkid);   // 모델에 넘겨
+
+            
 
             res.render('board/view', {loginUserInfo, viewData, page, search_key});     // view에 넘겨
         }  
@@ -170,8 +173,13 @@ const modifyProc = async(req, res) => {
         if (loginUserInfo != null) {
             let {pkid, title, content} = req.body;
             let {filePath, originalname} = ['', ''];
-
-
+            
+            let viewData = await model.getData(pkid);      
+            if (loginUserInfo.pkid != viewData.fkmember) {     // 게시글 작성자랑 로그인한 멤버 확인
+                common.alertAndGo(res, "잘못된 접근입니다.", "/board/")
+            }
+                
+            
             let dbFileData = await model.getFileData(pkid);
             console.log("db파일:",dbFileData);
             filePath = dbFileData.filepath;
@@ -189,10 +197,38 @@ const modifyProc = async(req, res) => {
                     common.moveFile('uploads/board/' + req.files[0].filename, filePath); 
                 }
             }
+
             await model.modifyBoard(title, content, filePath, originalname, pkid);
 
-
             common.alertAndGo(res, "수정 되었습니다.", "/board/")
+        }
+    
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+        console.log(error);
+    }
+}
+
+
+// 삭제
+const deleteProc = async(req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+            let {pkid} = req.body;
+
+            let viewData = await model.getData(pkid);      
+            if (loginUserInfo.pkid != viewData.fkmember) {     
+                common.alertAndGo(res, "잘못된 접근입니다.", "/board/")
+            }
+
+            let dbFileData = await model.getFileData(pkid);
+
+            await common.deleteFile(dbFileData.filepath);
+            await model.deleteBoard(pkid);
+
+
+            common.alertAndGo(res, "삭제 되었습니다.", "/board/")
 
         }
     
@@ -212,5 +248,6 @@ module.exports = {
     getAjaxList,
     getView,
     modify,
-    modifyProc
+    modifyProc,
+    deleteProc
 };

@@ -10,6 +10,12 @@ nunjucks.configure('views', {
     watch: true
 });
 
+var env = new nunjucks.Environment();
+env.addFilter('nl2br', function(str) {
+    return str.replace(/\n/g, '<br>');
+});
+
+
 // 정적파일 처리
 app.use('/assets', express.static(__dirname + '/assets'));
 app.use('/uploads', express.static(__dirname + '/uploads'));
