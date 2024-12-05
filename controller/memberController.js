@@ -119,8 +119,8 @@ const checkUserId = async(req, res) => {
         let loginUserInfo = common.checkLogin(req, res); 
         if (loginUserInfo != null) {
 
-            // get 방식 데이터 받기
             let {user_id} = req.body;   
+            
             
             user_id = common.reqeustFilter(user_id, 20, false);   
             let count = await model.getUserIdCount(user_id);   // 모델에 넘겨
@@ -132,6 +132,33 @@ const checkUserId = async(req, res) => {
             }
         }  
     
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+    }
+}
+
+
+const registerProc = async(req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+            let { user_id, user_pw, name } = req.body;
+
+            // XSS 방지
+            user_id = common.reqeustFilter(user_id, 20, false);
+            user_pw = common.reqeustFilter(user_pw, 20, false);
+            name = common.reqeustFilter(name, 50, false);
+
+            const result = await model.insertData(user_id, user_pw, name);
+
+            if (result != null) {
+                common.alertAndGo(res, "등록 되었습니다.", "/member")
+        
+            } else {
+                common.alertAndGo(res, "등록 실패", "/member/register")
+            }
+
+        }  
     } catch (error) {
         res.status(500).send('500 Error: ' + error);
     }
@@ -167,7 +194,61 @@ const logout = async(req, res) => {
 }
 
 
+const modifyMember = (async(req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
 
+            let {pkid, page, search_key} = req.query;
+            let viewData = await model.getData(pkid);
+            
+            res.render('member/modify', { loginUserInfo, viewData, page, search_key });
+    
+        }
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+    }
+});
+
+
+
+const modifyMemberProc = async(req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+            let {pkid, user_id, user_pw, name} = req.body;
+
+            console.log('수정 pkid: ', pkid);
+            
+            await model.modifyMember(user_id, user_pw, name, pkid);
+
+            common.alertAndGo(res, "수정 되었습니다.", "/member/")
+        }
+    
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+        console.log(error);
+    }
+}
+
+
+
+const deleteProc = async(req, res) => {
+    try {
+        let loginUserInfo = common.checkLogin(req, res); 
+        if (loginUserInfo != null) {
+            let {pkid} = req.body;
+
+            await model.deleteData(pkid);
+
+            common.alertAndGo(res, "삭제 되었습니다.", "/member/")
+
+        }
+    } catch (error) {
+        res.status(500).send('500 Error: ' + error);
+        console.log(error);
+    }
+}
 
 
 
@@ -178,5 +259,9 @@ module.exports = {
     getView,
     getRegister,
     checkUserId,
-    logout
+    logout,
+    modifyMember,
+    modifyMemberProc,
+    registerProc,
+    deleteProc
 };

@@ -111,6 +111,36 @@ const logout = async(sessionId) => {
 
 
 
+const modifyMember = async(user_id, user_pw, name, pkid) => {
+    try {
+        const sql = "update member SET user_id = ?, user_pw = ?, name = ? where pkid = ?";
+        const param = [user_id, user_pw, name, pkid];
+
+        await db.runSql(sql, param);
+
+        console.log('회원 수정');
+
+    } catch (error) {
+        throw "SQL Query Error on modifyMember" + error;
+    }
+};
+
+
+const deleteData = async(pkid) => {
+    try {
+        const sql = "delete from member where pkid = ?";
+        const param = [pkid];
+
+        await db.runSql(sql, param);
+
+        console.log('회원 삭제');
+
+    } catch (error) {
+        throw "SQL Query Error on deleteData" + error;
+    }
+};
+
+
 
 module.exports = {
     loginCheck,
@@ -119,5 +149,7 @@ module.exports = {
     getTotalRecordCount,
     getUserIdCount,
     insertData,
-    logout
+    logout,
+    modifyMember,
+    deleteData
 }

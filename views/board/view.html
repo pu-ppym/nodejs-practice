@@ -19,6 +19,7 @@
           <div class="card-body">
             <h5 class="card-title">{{viewData.title}}</h5>
             <p>{{viewData.content | nl2br | safe}}</p>
+            <img src="/{{viewData.filepath}}" alt="" style="max-width: 100px; height: auto;">
           </div>
           
 
@@ -30,8 +31,7 @@
                 {% if loginUserInfo.pkid == viewData.fkmember %}
               <a href="/board/modify?pkid={{viewData.pkid}}&page={{page}}&search_key={{search_key}}" class="btn btn-sm btn-outline-primary ms-1">수정</a>
               <form action="/board/delete" method="post">
-                <!-- pkid 전달 -->
-                <input type="hidden" name="pkid" value="{{viewData.pkid}}">
+                <input type="hidden" name="pkid" value="{{viewData.pkid}}"> <!-- pkid 전달 -->
                 <button type="submit" class="btn btn-sm btn-outline-danger ms-1">삭제</button>
               </form>
                 {% endif %}

@@ -64,3 +64,12 @@ db파일: {
   filepath: 'uploads/board/a9897da4afa64de1851e8165710eabbe.jpg',
   originalname: 'Fq5SuP8XoAAwuUb.jpg'
 }
+
+
+
+---마지막 정리
+
+글 수정할때 파일은 그대로 두고 제목, 내용만 바꾸기
+조회수 증가
+본인 글 수정, 삭제(버튼 내글만 보이기, 버튼 안보여도 처리페이지에서 처리)
+

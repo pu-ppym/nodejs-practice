@@ -191,6 +191,7 @@ const modifyProc = async(req, res) => {
             console.log("새로운 파일 확인: ",newFilePath); 
 
                 if (newFilePath) {   // 기존 파일과 다를때만
+                    await common.deleteFile(filePath);     // 기존 파일 삭제
                     originalname = req.files[0].originalname;
                     filePath = 'uploads/board/' + req.files[0].filename + common.getFileExtension(req.files[0].originalname);
                     

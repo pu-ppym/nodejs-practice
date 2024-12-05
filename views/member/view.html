@@ -29,8 +29,12 @@
 			<div class="card-footer">
 				<div class="d-flex justify-content-center">
 					<a href="/member/?page={{page}}&search_key={{search_key}}" class="btn btn-sm btn-outline-secondary ms-1">목록</a>
-					<a href="register.html" class="btn btn-sm btn-outline-primary ms-1">수정</a>
-					<a href="list.html" class="btn btn-sm btn-outline-danger ms-1">삭제</a>
+					<a href="/member/modify?pkid={{viewData.pkid}}&page={{page}}&search_key={{search_key}}" class="btn btn-sm btn-outline-primary ms-1">수정</a>
+					
+          <form action="/member/delete" method="post">
+            <input type="hidden" name="pkid" value="{{viewData.pkid}}"> <!-- pkid 전달 -->
+            <button type="submit" class="btn btn-sm btn-outline-danger ms-1">삭제</button>
+          </form>
 				</div>
 			</div>
           </div>

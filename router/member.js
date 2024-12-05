@@ -14,8 +14,16 @@ router.get('/view', controller.getView);
 
 router.get('/register', controller.getRegister);
 
+router.post('/register', controller.registerProc);
+
 router.post('/checkUserId', controller.checkUserId);
 
 router.get('/logout', controller.logout);
+
+router.get('/modify', controller.modifyMember);
+
+router.post('/modify', controller.modifyMemberProc);
+
+router.post('/delete', controller.deleteProc);
 
 module.exports = router;
